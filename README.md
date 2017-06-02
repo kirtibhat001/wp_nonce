@@ -65,31 +65,10 @@ $ mkdir ~/svn/wordpress-dev
 // Change to the new directory we just made.
 $ cd ~/svn/wordpress-dev
  
-// Check out the developer tools with SVN.
-$ svn co http://develop.svn.wordpress.org/trunk/
 ```
 
-2) Check the WordPress developer suite is working properly
-```
-// Change to the trunk directory.
-$ cd ~/svn/wordpress-dev/trunk/
- 
-// Make sure the checkout is up to date.
-$ svn up
- 
-// Run all of the tests.
-$ phpunit
- 
-// Run only, e.g., the cache tests.
-$ phpunit tests/phpunit/tests/cache
-```
 
-3) Install this plugin
-```
-composer require kamalyon/wp-nonce
-```
-
-4) Change the paths in the bootstrap.php file of the plugin
+2) Change the paths in the bootstrap.php file of the plugin
 ```
 // The path to the WordPress tests checkout.
 define( 'WP_TESTS_DIR', '/Users/me/workspace/wordpress-dev/trunk/tests/phpunit/' );
