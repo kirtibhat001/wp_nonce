@@ -1,85 +1,87 @@
-# wp-nonce
-WordPress plugin that enables the wordpress nonce function in an object-oriented environment.
+# WpNonceOOP
+A compose package which serves the functionality of working with WordPress Nonces in object oriented environment
 
-##How to install
 
-Add to your composer.json file this package as a require an then run 'composer update'
+Table of contents:
+ * [Requirements](#requirements)
+ * [Installation](#installation)
+ * [Usage](#usage)
+
+## Requirements
+
+* PHP >= 5.3.0
+* WordPress >= 4.6
+
+## Installation
+
+You can install this class both on command-line or by pasting it into the root of your plugin directory.
+
+### via Command-line
+
+Using [Composer](https://getcomposer.org/), add Custom Nonce Class to your plugin's dependencies.
+
+```sh
+composer require okuley/wordpress-nonce:dev-master
 ```
-"kirti/wp-nonce": "1.0.*"
-```
 
-Or directly run
-```
-composer require kirti/wp-nonce
-```
+### Another way
 
-##How to use
+1. Download the [latest zip](https://github.com/niiokuley/WpNonceOOP/archive/master.zip) of this repo.
+2. Unzip the master.zip file.
+3. Copy and paste it into the root of your plugin directory.
+4. Continue with your project.
 
-Create nonce
+## Usage
+
+Setup the minimum required thigs:
+
 ```php
-$Wp_Nonce = new Wp_Nonce();
-$nonce = $Wp_Nonce->createNonce('my-nonce');
-```
+<?php 
 
-Prints nonce input field
+require_once __DIR__ . '/../vendor/autoload.php'; // Autoload files using Composer autoload
+
+use Nonces\WpNonce;
+
+
+// Instantiate an object of the class
+$nonce = new WpNonce();
+```
+### Examples
+
+Adding a nonce to a URL:
+
 ```php
-$Wp_Nonce = new Wp_Nonce();
-$Wp_Nonce->nonceField('name-of-my-action', 'name-of-nonce-field');
+$url="/../wp-admin/post.php?post=48";
+$complete_url = $nonce->wp_nonce_url( $url, 'edit-post_'.$post->ID );
 ```
 
-Create nonce url 
+Adding a nonce to a form:
+
 ```php
-$Wp_Nonce = new Wp_Nonce();
-$url = $Wp_Nonce->nonceURL('http://my-url.com', 'doing-something', 'my-nonce');
+$nonce->get_wp_nonce_field( 'delete-post_'.$post_id );
 ```
 
-Verify nonce
+creating a nonce:
+
 ```php
-$nonce = $_REQUEST['nonce'];
-$Wp_Nonce = new Wp_Nonce();
-if ($Wp_Nonce->verifyNonce($nonce, 'my-nonce')) {
-    //OK  
-}else{
-    //KO
-}
+$newnonce = $nonce->wp_create_nonce( 'action_'.$post->id );
 ```
 
-Check admin referer
- ```php
- $Wp_Nonce = new Wp_Nonce();
- if ($Wp_Nonce->checkAdminReferer('name-of-my-action', 'name-of-nonce-field')) {
-    //OK
- }else{
-    //KO
- }
- ```
- 
-##How to run Unit Tests
+Verifying a nonce:
 
-1) Install WordPress developer suite
-```
-// Make the directory for the tools (assumes that ~/svn exists; 
-// you can create it by running "$ mkdir ~/svn")
-$ mkdir ~/svn/wordpress-dev
- 
-// Change to the new directory we just made.
-$ cd ~/svn/wordpress-dev
- 
+```php
+$nonce->wp_verify_nonce_field( 'delete-post_'.$post_id );
 ```
 
+Verifying a nonce passed in an AJAX request:
 
-2) Change the paths in the bootstrap.php file of the plugin
+```php
+$nonce->wp_check_ajax_referer( 'post-comment' );
 ```
-// The path to the WordPress tests checkout.
-define( 'WP_TESTS_DIR', '/Users/me/workspace/wordpress-dev/trunk/tests/phpunit/' );
-// The path to the main file of the plugin to test.
-define( 'TEST_PLUGIN_FILE', '/Users/me/workspace/wp-nonce/wp-nonce.php' );
- ```
- 
-5) Run the unit tests
- ```
-// Go to the plugin's folder
-cd /Users/me/workspace/wp-nonce/
-// Run the tests
-phpunit
- ```
+
+Verifying a nonce passed in some other context:
+
+```php
+$nonce->wp_check_admin_referer( $_REQUEST['my_nonce'], 'edit-post_'.$post->ID );
+```
+
