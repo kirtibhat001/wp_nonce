@@ -1,0 +1,14 @@
+{
+    "name": "kirti/wp-nonce",
+    "description": "Implementation of the whole featured WordPress Nonces in an object oriented way. Included in the root directory is a unit test case.",
+    "type": "project",
+    "license": "1.1",
+    "authors": [
+        {
+            "name": "kirti bhawsar",
+            "email": "kirti.bhat001@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
